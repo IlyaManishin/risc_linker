@@ -4,3 +4,4 @@ test
 **/temps/*
 *.i
 *.o
+*.bin

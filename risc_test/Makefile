@@ -1,32 +1,45 @@
+
+#--------------------------PATHS-------------------------------
 LINKER_DIR = linker/
 TEMPS_DIR = temps/
-OUT_DIR = result/
+RES_DIR = result/
 
 START_SCRIPT = $(LINKER_DIR)/start.c
 LINKER = $(LINKER_DIR)/riscv.ld
 
 SRC = test.c
-OUT = res  
+OUT_NAME = res
 
+OUT = $(RES_DIR)/$(OUT_NAME)  
+IMEM = $(RES_DIR)/imem.bin  
+DMEM = $(RES_DIR)/dmem.bin
+
+
+#--------------------------CONFIG-------------------------------
 CC = riscv64-unknown-elf-gcc
+OBJCOPY = riscv64-unknown-elf-objcopy
+
 RISC32_FLAGS = -march=rv32i -mabi=ilp32 -save-temps
 COMPR_FLAGS = -ffreestanding -nostdlib -ffunction-sections \
 			  -fdata-sections -fno-asynchronous-unwind-tables -fno-unwind-tables
 LDFLAGS = -T $(LINKER) -Wl,--gc-sections
 
 
+#--------------------------BUILD-------------------------------
 all: $(OUT) move_temps
 
 $(OUT): $(SRC) $(LINKER) $(START_SCRIPT)
+	mkdir -p $(RES_DIR)
 	mkdir -p $(TEMPS_DIR)
-	mkdir -p $(OUT_DIR)
 
-	$(CC) $(RISC32_FLAGS) $(COMPR_FLAGS) $(LDFLAGS) $(SRC) $(START_SCRIPT) -o $(TEMPS_DIR)/$(OUT)
-	mv $(TEMPS_DIR)/$(OUT) $(OUT_DIR)
+	$(CC) $(RISC32_FLAGS) $(COMPR_FLAGS) $(LDFLAGS) $(SRC) $(START_SCRIPT) -o $(TEMPS_DIR)/$(OUT_NAME)
+	mv $(TEMPS_DIR)/$(OUT_NAME) $(OUT)
+
+	$(OBJCOPY) -O binary -j .text $(OUT) $(IMEM)
+	$(OBJCOPY) -O binary -j .data $(OUT) $(DMEM)
 
 clean:
-	rm -f res || true
-	rm -rf temps/*
+	rm -rf $(RES_DIR)/
 
 move_temps:
 	mkdir -p $(TEMPS_DIR)/i_files $(TEMPS_DIR)/o_files $(TEMPS_DIR)/s_files
