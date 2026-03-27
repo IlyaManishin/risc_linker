@@ -3,5 +3,4 @@ out.*
 test
 **/temps/*
 *.i
-
 *.o

@@ -17,7 +17,7 @@ LDFLAGS = -T $(LINKER) -Wl,--gc-sections
 
 all: $(OUT) move_temps
 
-$(OUT):
+$(OUT): $(SRC) $(LINKER) $(START_SCRIPT)
 	mkdir -p $(TEMPS_DIR)
 	mkdir -p $(OUT_DIR)
 
@@ -25,7 +25,7 @@ $(OUT):
 	mv $(TEMPS_DIR)/$(OUT) $(OUT_DIR)
 
 clean:
-	rm res
+	rm -f res || true
 	rm -rf temps/*
 
 move_temps:

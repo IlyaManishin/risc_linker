@@ -17,7 +17,7 @@ SECTIONS
     .text :
     {
         . = ORIGIN(imem);
-         *(.text.start)
+        *(.text.start)
         *(.text .text.*)
     } > imem
     
@@ -26,6 +26,7 @@ SECTIONS
     {
         __DATA_START__ = .;
         *(.data .data.*)
+        *(.sdata .sdata.*)
     } > dmem
     
     .bss ALIGN(4) :
