@@ -1,4 +1,3 @@
-
 #--------------------------PATHS-------------------------------
 LINKER_DIR = linker/
 TEMPS_DIR = temps/
@@ -26,7 +25,13 @@ LDFLAGS = -T $(LINKER) -Wl,--gc-sections
 
 
 #--------------------------BUILD-------------------------------
-all: $(OUT) move_temps
+all: $(IMEM) $(DMEM) move_temps
+
+$(IMEM): $(OUT)
+	$(OBJCOPY) -O binary -j .text $(OUT) $(IMEM)
+
+$(DMEM): $(OUT)
+	$(OBJCOPY) -O binary -j .data $(OUT) $(DMEM)
 
 $(OUT): $(SRC) $(LINKER) $(START_SCRIPT)
 	mkdir -p $(RES_DIR)
@@ -34,9 +39,6 @@ $(OUT): $(SRC) $(LINKER) $(START_SCRIPT)
 
 	$(CC) $(RISC32_FLAGS) $(COMPR_FLAGS) $(LDFLAGS) $(SRC) $(START_SCRIPT) -o $(TEMPS_DIR)/$(OUT_NAME)
 	mv $(TEMPS_DIR)/$(OUT_NAME) $(OUT)
-
-	$(OBJCOPY) -O binary -j .text $(OUT) $(IMEM)
-	$(OBJCOPY) -O binary -j .data $(OUT) $(DMEM)
 
 clean:
 	rm -rf $(RES_DIR)/
