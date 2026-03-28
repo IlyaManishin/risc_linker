@@ -1,8 +1,8 @@
 OUTPUT_ARCH( "riscv" )
 MEMORY
 {
-   imem   (x): ORIGIN = 0x00400000, LENGTH = 1024
-   dmem  (rw): ORIGIN = 0x10010000, LENGTH = 1024
+   imem   (x): ORIGIN = 0x40000000, LENGTH = 32768
+   dmem  (rw): ORIGIN = 0x80000000, LENGTH = 16384
 }
 
 ENTRY( _start)
