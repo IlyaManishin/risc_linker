@@ -8,8 +8,8 @@
 	.globl	_start
 	.type	_start, @function
 _start:
-    lui	gp,%hi(__GLOBAL_POINTER__)
-	addi	gp,gp,%lo(__GLOBAL_POINTER__)
+    lui	gp,%hi(__global_pointer$)
+	addi	gp,gp,%lo(__global_pointer$)
 
 	lui	a5,%hi(__BSS_START__)
 	addi	a5,a5,%lo(__BSS_START__)
