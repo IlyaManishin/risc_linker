@@ -24,9 +24,11 @@ SECTIONS
     . = ORIGIN(dmem);
     .data ALIGN(4) :
     {
-        __DATA_START__ = .;
         *(.data .data.*)
+        __SDATA_START__ = .;
         *(.sdata .sdata.*)
+        __SDATA_END__ = .;
+        __GLOBAL_POINTER__ = (__SDATA_START__ + __SDATA_END__) / 2;
     } > dmem
     
     .bss ALIGN(4) :

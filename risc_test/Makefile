@@ -3,7 +3,7 @@ LINKER_DIR = linker/
 TEMPS_DIR = temps/
 RES_DIR = result/
 
-START_SCRIPT = $(LINKER_DIR)/start.c
+START_SCRIPT = $(LINKER_DIR)/start.s
 LINKER = $(LINKER_DIR)/riscv.ld
 
 SRC = test.c
@@ -42,6 +42,7 @@ $(OUT): $(SRC) $(LINKER) $(START_SCRIPT)
 
 clean:
 	rm -rf $(RES_DIR)/
+	rm -rf $(TEMPS_DIR)/
 
 move_temps:
 	mkdir -p $(TEMPS_DIR)/i_files $(TEMPS_DIR)/o_files $(TEMPS_DIR)/s_files
