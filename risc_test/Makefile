@@ -1,12 +1,12 @@
 #--------------------------PATHS-------------------------------
-LINKER_DIR = linker/
-TEMPS_DIR = temps/
-RES_DIR = result/
+LINKER_DIR = linker
+TEMPS_DIR = temps
+RES_DIR = result
 
 START_SCRIPT = $(LINKER_DIR)/start.s
 LINKER = $(LINKER_DIR)/riscv.ld
 
-SRC = test.c
+SRC ?= test.c
 OUT_NAME = res
 
 OUT = $(RES_DIR)/$(OUT_NAME)  
@@ -19,7 +19,7 @@ CC = riscv64-unknown-elf-gcc
 OBJCOPY = riscv64-unknown-elf-objcopy
 
 RISC32_FLAGS = -march=rv32i -mabi=ilp32 -save-temps
-COMPR_FLAGS = -Os -ffreestanding -nostdlib -ffunction-sections \
+COMPR_FLAGS = -ffreestanding -nostdlib -ffunction-sections \
 			  -fdata-sections -fno-asynchronous-unwind-tables -fno-unwind-tables
 LDFLAGS = -T $(LINKER) -Wl,--gc-sections
 
@@ -41,7 +41,7 @@ $(OUT): $(SRC) $(LINKER) $(START_SCRIPT)
 	mv $(TEMPS_DIR)/$(OUT_NAME) $(OUT)
 
 clean:
-	rm -rf $(RES_DIR)/
+	rm $(RES_DIR)/*
 	rm -rf $(TEMPS_DIR)/
 
 move_temps:
