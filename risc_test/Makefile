@@ -27,11 +27,13 @@ LDFLAGS      = -T $(LINKER) -Wl,--gc-sections
 #--------------------------BUILD--------------------------------
 all: $(IMEM) $(DMEM) move_temps
 
+# only .text section
 $(IMEM): $(OUT)
-	$(OBJCOPY) -O binary -j .text $(OUT) $(IMEM)
+	$(OBJCOPY) -O binary -j .text $(OUT) $(IMEM) 
 
+# all sections except .text
 $(DMEM): $(OUT)
-	$(OBJCOPY) -O binary -j .data $(OUT) $(DMEM)
+	$(OBJCOPY) -O binary -R .text $(OUT) $(DMEM)
 
 $(OUT): $(SRC) $(LINKER) $(START_SCRIPT)
 	mkdir -p $(RES_DIR)
