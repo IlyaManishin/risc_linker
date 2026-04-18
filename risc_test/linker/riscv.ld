@@ -20,21 +20,33 @@ SECTIONS
     } > imem
     
     . = ORIGIN(dmem);
+
+    .rodata ALIGN(4) :
+    {
+        *(.rodata .rodata.*)
+    } > dmem
+
     .data ALIGN(4) :
     {
         *(.data .data.*)
-
-        . = ALIGN(4);
+    } > dmem
+    
+    .sdata ALIGN(4) :
+    {
         __SDATA_START__ = .;
         *(.sdata .sdata.*)
-        __SDATA_END__ = .;
-        __global_pointer$ = (__SDATA_START__ + __SDATA_END__) / 2;
+        *(.srodata .srodata.*)
     } > dmem
     
     .bss ALIGN(4) :
     {
         __BSS_START__ = .;
-        *(.bss .bss.*)
+        *(.sbss .sbss.* )
+        . = ALIGN(4);
+        __SDATA_END__ = .;
+        __global_pointer$ = (__SDATA_START__ + __SDATA_END__) / 2;
+
+        *(.bss  .bss.*)
         *(COMMON)
         . = ALIGN(4);
         __BSS_END__ = .;
@@ -45,4 +57,10 @@ SECTIONS
         . = . + STACK_SIZE;
         __stack_top = .;
     } > dmem
+
+    /DISCARD/ :
+    {
+        *(.comment)
+        *(.riscv.attributes)
+    }
 }

@@ -1,5 +1,9 @@
 static int offset = 5;
 
+static int stat_const_var = 10;
+static int bss_const_var;
+
+
 int fib(int n)
 {
     int a = 0;
@@ -19,7 +23,7 @@ int fib(int n)
 
 int main()
 {
-    int n = 10;
+    int n = stat_const_var + bss_const_var;
     int res = fib(n);
 
     asm volatile(
