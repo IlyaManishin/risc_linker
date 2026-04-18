@@ -7,9 +7,7 @@ MEMORY
 
 ENTRY( _start)
 
-GP_BUG_OFFSET = 0;
 STACK_SIZE    = 128;
-
 __stack_start = ORIGIN(dmem) + LENGTH(dmem) - STACK_SIZE;
 
 SECTIONS

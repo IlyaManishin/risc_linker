@@ -6,24 +6,34 @@
 	.globl	_start
 	.type	_start, @function
 _start:
-    lui	gp,%hi(__global_pointer$)
-	addi	gp,gp,%lo(__global_pointer$)
+    # Global pointer init
+    lui     gp, %hi(__global_pointer$)
+    addi    gp, gp, %lo(__global_pointer$)
 
-	lui	sp,%hi(__stack_top)
-	addi	sp,sp,%lo(__stack_top)
+    # Stack pointer init
+    lui     sp, %hi(__stack_top)
+    addi    sp, sp, %lo(__stack_top)
 
-	lui	a5,%hi(__BSS_START__)
-	addi	a5,a5,%lo(__BSS_START__)
-	lui	a4,%hi(__BSS_END__)
-	addi	a4,a4,%lo(__BSS_END__)
+    # BSS Ranges
+    lui     a5, %hi(__BSS_START__)
+    addi    a5, a5, %lo(__BSS_START__)
+    lui     a4, %hi(__BSS_END__)
+    addi    a4, a4, %lo(__BSS_END__)
+
+bss_init_loop:
+    # If a5 >= a4, BSS is cleared, jump to main
+    bgeu    a5, a4, prog_run
     
-.L2:
-	bltu	a5,a4,.L3
-	call	main
-.L4:
-	nop #remove maybe 
-	j	.L4
-.L3:
-	addi	a5,a5,1
-	sb	zero,-1(a5)
-	j	.L2
+    # Clear bss
+    sb      zero, 0(a5)
+    addi    a5, a5, 1
+    j       bss_init_loop
+
+prog_run:
+    call    main
+
+.fin_loop:
+    nop
+    j       .fin_loop
+
+
