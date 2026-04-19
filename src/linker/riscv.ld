@@ -38,10 +38,10 @@ SECTIONS
         *(.srodata .srodata.*)
 
         # add sbss as sdata
+        . = ALIGN(4);
         __BSS_START__ = .;
         *(.sbss .sbss.* )
         
-        . = ALIGN(4);
         __SDATA_END__ = .;
         __global_pointer$ = (__SDATA_START__ + __SDATA_END__) / 2;
     } > dmem
